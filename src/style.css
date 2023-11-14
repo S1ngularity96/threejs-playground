@@ -1,0 +1,26 @@
+body {
+  margin: 0;
+}
+
+#app {
+  margin: auto;
+  width: 1920px;
+  height: 1108px;
+}
+
+#controls {
+  display: none;
+  padding: 12px;
+  font-size: 18px;
+  border: 1px solid gray;
+  color: white;
+  position: absolute;
+  z-index: 100;
+  right: 0;
+}
+
+#controls form {
+  display: hidden;
+  flex-direction: column;
+
+}
