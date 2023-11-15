@@ -1,11 +1,12 @@
 body {
   margin: 0;
+  height: 100vh;
 }
 
 #app {
   margin: auto;
-  width: 1920px;
-  height: 1108px;
+  width: 100%;
+  height: 100%;
 }
 
 #controls {

@@ -4,7 +4,8 @@ import './style.css'
 const container = document.querySelector('#app');
 if (container !== null) {
     const world = new World(container);
-    world.render();
+    world.start();
+    //world.render();
     
 } else {
     alert("Container with name #app does not exist")
