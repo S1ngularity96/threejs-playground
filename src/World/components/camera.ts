@@ -1,31 +1,27 @@
-import { DirectionalLight, MathUtils, Object3D, PerspectiveCamera, SpotLight } from "three";
+import { Object3D, PerspectiveCamera } from "three";
 import { ITick } from "../interfaces/ITick";
-import { createLight } from "./light";
+import { Light } from "./light";
+import { createDirectionalLightHelper } from "./helpers";
 
 
-class POVCamera implements ITick {
-    private camera: PerspectiveCamera;
-    public light: DirectionalLight | undefined;
+class POVCamera extends PerspectiveCamera implements ITick {
+
+    private light: Light | undefined;
     constructor() {
-        this.camera = new PerspectiveCamera(50, 1, 0.1, 100);
-        this.camera.position.set(0, 10, 10);
+        super(50, 1, 0.1, 100)
     }
 
-    attachDirectionalLight(target?: Object3D) {
+    attachDirectionalLight(light: Light, target?: Object3D) {
+        this.light = light;
 
-        this.light = createLight().mainLight;
-        this.light.position.set(0, 0, -2)
-
-        this.light.intensity = 10;
-        this.camera.add(this.light);
-    }
-
-    get(): PerspectiveCamera {
-        return this.camera;
+        if (target) {
+            light.target = target;
+        }
+        this.add(createDirectionalLightHelper(light))
+        this.add(this.light);
     }
 
     tick(delta: number): void {
-        
     }
 
 }

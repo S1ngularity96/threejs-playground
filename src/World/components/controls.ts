@@ -10,7 +10,7 @@ class Controls implements ITick {
 
     configure(enableDamping: boolean, dampingFactor: number = 0.1, target?: Object3D) {
         this.controls.enableDamping = enableDamping;
-        this.controls.enablePan = false;
+        this.controls.enablePan = true;
         this.controls.dampingFactor = dampingFactor
         if (target)
             this.controls.target = target.position;

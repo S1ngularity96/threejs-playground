@@ -1,4 +1,4 @@
-import { Color, Scene, WebGLRenderer } from "three";
+import { Color, Group, Scene, WebGLRenderer } from "three";
 import { POVCamera } from "./components/camera";
 import { createScene } from "./components/scene";
 import { createRenderer } from "./systems/renderer";
@@ -7,50 +7,46 @@ import { Cube } from "./components/cube";
 import { Flex } from "./systems/Flex";
 import { Loop } from "./systems/Loop";
 import { Controls } from "./components/controls";
-import { createLight } from "./components/light";
+import { Light } from "./components/light";
 import { createAxesHelper, createCameraHelper, createDirectionalLightHelper, createGridHelper } from "./components/helpers";
 
 export class World {
     private container: Element | null;
-
     private camera: POVCamera;
     private scene: Scene;
     private renderer: WebGLRenderer;
     private loop: Loop;
     constructor(container: Element) {
         this.container = container;
+        const cameraLight = new Light(Color.NAMES.white, 1);
+        
         this.camera = new POVCamera();
-
+        this.camera.position.set(0, 5, 10);
+        this.camera.attachDirectionalLight(cameraLight)
         this.scene = createScene();
 
-        const cubes = [new Cube({ width: 2, height: 2, depth: 2 })]
-        this.camera.attachDirectionalLight()
-        Flex.row(cubes.map(cube => cube.get()), 3)
-        cubes.map(cube => cube.get()).forEach(cube => {
-            cube.rotation.set(0, 0.5, 0)
-            this.scene.add(cube);
-        })
-
-        const { mainLight } = createLight();
-        //this.scene.add(mainLight)
-
+        const cube = new Cube({ width: 2, height: 2, depth: 2 })
+        cube.rotation.set(0, 0.5, 0)
+        this.scene.add(cube);
+      
         this.renderer = createRenderer();
-        new Resizer(container, this.camera.get(), this.renderer);
-        this.loop = new Loop(this.camera.get(), this.scene, this.renderer);
-        const controls = new Controls(this.camera.get(), this.renderer.domElement);
-        controls.configure(true, 0.1, cubes[0].get())
+        new Resizer(container, this.camera, this.renderer);
+        this.loop = new Loop(this.camera, this.scene, this.renderer);
+        const controls = new Controls(this.camera, this.renderer.domElement);
+        controls.configure(true, 0.2)
         this.loop.addUpdatable([controls, this.camera]);
-        this.scene.add(createGridHelper())
-        this.scene.add(createAxesHelper())
-        this.scene.add(createDirectionalLightHelper(mainLight))
-        if (this.camera.light) {
-            this.scene.add(createDirectionalLightHelper(this.camera.light))
-        }
+        this.addHelper()
+        this.scene.add(this.camera);
         this.container.appendChild(this.renderer.domElement);
     }
 
+    addHelper() {
+        this.scene.add(createGridHelper())
+        this.scene.add(createAxesHelper())
+    }
+
     render() {
-        this.renderer.render(this.scene, this.camera.get());
+        this.renderer.render(this.scene, this.camera);
     }
 
     start() {

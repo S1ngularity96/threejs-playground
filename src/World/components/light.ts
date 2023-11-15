@@ -1,11 +1,13 @@
-import { DirectionalLight } from "three";
+import { Color, ColorRepresentation, DirectionalLight } from "three";
+import { ITick } from "../interfaces/ITick";
 
-function createLight() {
+class Light extends DirectionalLight implements ITick {
+    constructor(color?: ColorRepresentation | undefined, intensity?: number | undefined) {
+        super(color, intensity);
+    }
 
-    const mainLight = new DirectionalLight('yellow', 1.5);
-    mainLight.position.set(20, 20, 20);
+    tick(delta: number) { }
 
-    return { mainLight };
 }
 
-export { createLight };
+export { Light };
