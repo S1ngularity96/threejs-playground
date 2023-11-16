@@ -3,7 +3,7 @@ import { ITick } from "../interfaces/ITick";
 
 function getMaterial() {
     const tloader = new TextureLoader();
-    const texture = tloader.load('/assets/textures/uv-test-col.png');
+    const texture = tloader.load('/assets/textures/uv-test-bw.png');
     new MeshPhongMaterial({})
     const material = new MeshStandardMaterial({ map: texture})
     return material;
@@ -16,8 +16,6 @@ class Cube extends Mesh<BoxGeometry, MeshStandardMaterial, Object3DEventMap> imp
     }
 
     tick(delta: number) {
-        this.rotation.z += this.radiansPerSecond * delta;
-        this.rotation.x += this.radiansPerSecond * delta;
         this.rotation.y += this.radiansPerSecond * delta;
     }
 }
