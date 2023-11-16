@@ -5,14 +5,13 @@ import { Light } from "./light";
 
 class POVCamera extends PerspectiveCamera implements ITick {
 
-    private light: Light | undefined;
+    public light: Light | undefined;
     constructor() {
         super(50)
     }
 
     attachDirectionalLight(light: Light, target?: Object3D) {
         this.light = light;
-
         if (target) {
             light.target = target;
         }
