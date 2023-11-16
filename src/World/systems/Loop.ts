@@ -10,11 +10,13 @@ class Loop {
     private renderer: WebGLRenderer;
     private updatables: Array<ITick> = [];
     private clock: Clock;
-    constructor(camera: PerspectiveCamera, scene: Scene, renderer: WebGLRenderer) {
+    private stats: Stats | undefined;
+    constructor(camera: PerspectiveCamera, scene: Scene, renderer: WebGLRenderer, stats?: Stats) {
         this.camera = camera;
         this.scene = scene;
         this.renderer = renderer;
         this.clock = new Clock();
+        this.stats = stats;
     }
 
     addUpdatable(updatable: Iterable<ITick>) {
@@ -32,9 +34,18 @@ class Loop {
         this.renderer.setAnimationLoop(null);
     }
 
+    private monitor(callback: () => void) {
+        this.stats?.begin();
+        callback()
+        this.stats?.end();
+    }
+
     tick() {
         const delta = this.clock.getDelta();
-        this.updatables.forEach((value) => value.tick(delta))
+        this.monitor(() => {
+            this.updatables.forEach((value) => value.tick(delta))
+        })
+
     }
 }
 

@@ -8,7 +8,7 @@ import { Flex } from "./systems/Flex";
 import { Loop } from "./systems/Loop";
 import { Controls } from "./components/controls";
 import { Light } from "./components/light";
-import { createAxesHelper, createCameraHelper, createDirectionalLightHelper, createGridHelper } from "./components/helpers";
+import { createAxesHelper, createGridHelper, createStatsHelper } from "./components/helpers";
 
 export class World {
     private container: Element | null;
@@ -17,26 +17,27 @@ export class World {
     private renderer: WebGLRenderer;
     private loop: Loop;
     constructor(container: Element) {
+        this.renderer = createRenderer();
         this.container = container;
         const cameraLight = new Light(Color.NAMES.white, 1);
         
         this.camera = new POVCamera();
         this.camera.position.set(0, 5, 10);
         this.camera.attachDirectionalLight(cameraLight)
+        const controls = new Controls(this.camera, this.renderer.domElement);
+        controls.configure(true, 0.2)
+        new Resizer(container, this.camera, this.renderer);
+        
         this.scene = createScene();
-
+        this.scene.add(this.camera);
+        
         const cube = new Cube({ width: 2, height: 2, depth: 2 })
         cube.rotation.set(0, 0.5, 0)
         this.scene.add(cube);
-      
-        this.renderer = createRenderer();
-        new Resizer(container, this.camera, this.renderer);
-        this.loop = new Loop(this.camera, this.scene, this.renderer);
-        const controls = new Controls(this.camera, this.renderer.domElement);
-        controls.configure(true, 0.2)
-        this.loop.addUpdatable([controls, this.camera]);
+        
+        this.loop = new Loop(this.camera, this.scene, this.renderer, createStatsHelper());
+        this.loop.addUpdatable([controls, this.camera, cube]);
         this.addHelper()
-        this.scene.add(this.camera);
         this.container.appendChild(this.renderer.domElement);
     }
 

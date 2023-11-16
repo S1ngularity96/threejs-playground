@@ -1,5 +1,5 @@
 import { AxesHelper, Camera, CameraHelper, DirectionalLight, DirectionalLightHelper, GridHelper } from "three";
-
+import * as Stats from 'stats.js'
 function createAxesHelper() {
     const helper = new AxesHelper(3);
     helper.position.set(-3.5, 0, -3.5)
@@ -20,4 +20,10 @@ function createDirectionalLightHelper(light: DirectionalLight) {
     return new DirectionalLightHelper(light, 1)
 }
 
-export { createAxesHelper, createCameraHelper, createGridHelper, createDirectionalLightHelper }
+function createStatsHelper(): Stats {
+    const stats = new Stats()
+    document.body.appendChild(stats.dom);
+    return stats;
+}
+
+export { createAxesHelper, createCameraHelper, createGridHelper, createDirectionalLightHelper, createStatsHelper }
