@@ -1,5 +1,5 @@
 import { AxesHelper, Camera, CameraHelper, DirectionalLight, DirectionalLightHelper, GridHelper } from "three";
-import * as Stats from 'stats.js'
+import Stats from "three/examples/jsm/libs/stats.module.js";
 function createAxesHelper() {
     const helper = new AxesHelper(3);
     helper.position.set(-3.5, 0, -3.5)
